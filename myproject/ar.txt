@@ -1,0 +1,83 @@
+Una empresa está desarrollando un sistema de préstamos a empleados. Se desea automatizar a sus empleados, cargos, préstamos y sus pagos. A continuación, se presenta cada modelo con sus campos:
+
+ from django.db import models
+
+class Cargo(models.Model):
+
+    nombre_cargo = models.CharField(max_length=100)
+
+    descripcion = models.TextField()
+
+     def __str__(self):
+
+        return self.nombre_cargo
+
+ class Empleado(models.Model):
+
+    nombre = models.CharField(max_length=100)
+
+    apellido = models.CharField(max_length=100)
+
+    direccion = models.CharField(max_length=255)
+
+    telefono = models.CharField(max_length=15)
+
+    email = models.EmailField()
+
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE,  
+
+                  related_name='empleados')
+
+     def __str__(self):
+
+        return f"{self.nombre} {self.apellido}"
+
+ class Prestamo(models.Model):
+
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+
+    fecha_prestamo = models.DateField()
+
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE,
+
+                         related_name='prestamos')
+
+    numero_cuotas = models.IntegerField()
+
+    cuota = models.DecimalField(max_digits=8, decimal_places=2)
+
+     def __str__(self):
+
+        return f"Préstamo ID {self.id} - {self.monto}"
+
+ class Pago(models.Model):
+
+    monto_pago = models.DecimalField(max_digits=10, decimal_places=2)
+
+    fecha_pago = models.DateField()
+
+    prestamo = models.ForeignKey(Prestamo, on_delete=models.CASCADE,
+
+                         related_name='pagos')
+
+     def __str__(self):
+
+        return f"Pago ID {self.id} - {self.monto_pago}"
+
+  Luego se desea realizar los inserciones, consultas, actualizaciones y eliminaciones de los registros de los modelos mencionados.
+
+                                                                                                         FILA 1
+Insertar 2 registros en la tabla Cargo con Create().
+Insertar 3 registros en la tabla Empleado con save():
+Insertar 5 registros en la tabla Préstamo: Con Create().
+Por cada préstamo creado, crea 3 registros en la tabla pagos con bulk_create().
+Obtener empleados que tienen un apellido que comience con 'G' y cuyo email termine en 'gmail.com'.
+Obtener todos los préstamos con un monto mayor a 5000 y menos de 10 cuotas.
+Encontrar pagos realizados antes de una fecha específica y con un monto mayor a 200.
+Calcular el salario total pagado a los empleados.
+ Calcular el monto promedio de los préstamos.
+ Contar el número de empleados por cargo.
+ Obtener todos los empleados que pertenecen a un cargo específico.
+ Listar todos los préstamos que ha tomado un empleado específico.
+Aumente en un 10 por ciento a los prestamos cuyo monto sea menor a 500
+ Elimine los prestamos cuyo que no tengan pago
